@@ -22,6 +22,22 @@ public class Message extends Model {
         this.message = message;
     }
 
+     /*
+    Properties
+     */
+
+    public long getTalkerId() {
+        return talkerId;
+    }
+
+    public long getRoomID() {
+        return roomID;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
     /*
     Static methods
      */

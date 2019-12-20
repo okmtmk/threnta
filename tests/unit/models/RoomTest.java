@@ -43,4 +43,18 @@ public class RoomTest {
 
         assertEquals("test", model.getDescription());
     }
+
+    @Test
+    public void testGetMessages() throws ModelNotFoundException, SQLException {
+        Room model = Room.find(1);
+
+        assertEquals(1, model.getMessages().get(0).getId());
+        assertTrue(model.getMessages().size() > 0);
+    }
+
+    @Test
+    public void testGetLimitedMessages() throws ModelNotFoundException, SQLException {
+        Room model = Room.find(1);
+        assertTrue(model.getMessages(10).size() > 0);
+    }
 }

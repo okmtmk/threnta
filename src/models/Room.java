@@ -71,7 +71,7 @@ public class Room extends Model {
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
-        String sqlLimit = limit > 0 ? "limit " + limit : "";
+        String sqlLimit = limit > 0 ? " fetch first " + limit + " rows only " : "";
         ResultSet set = statement.executeQuery(
                 "select * from " + Message.MODEL_NAME +
                         " where " + Message.ROOM_ID + " = " + id +
