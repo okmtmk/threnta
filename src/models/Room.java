@@ -3,13 +3,15 @@ package models;
 import exceptions.ModelNotFoundException;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Room extends Model {
-    protected static final String MODEL_NAME = "ROOMS";
+    static final String MODEL_NAME = "ROOMS";
 
-    protected static final String CREATE_TALKER_ID = "CREATE_TALKER_ID";
-    protected static final String NAME = "NAME";
-    protected static final String DESCRIPTION = "DESCRIPTION";
+    static final String CREATE_TALKER_ID = "CREATE_TALKER_ID";
+    static final String NAME = "NAME";
+    static final String DESCRIPTION = "DESCRIPTION";
 
     protected long createTalkerId;
     protected String name;
@@ -36,8 +38,84 @@ public class Room extends Model {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * 関連するメッセージを全件取得
+     *
+     * @return メッセージ
+     * @throws SQLException SQLエラー
+     */
+    public List<Message> getMessages() throws SQLException {
+        return getMessages(-1);
+    }
+
+    /**
+     * 関連するメッセージを指定件数取得
+     *
+     * @param limit 取得する数
+     * @return メッセージ
+     * @throws SQLException SQLエラー
+     */
+    public List<Message> getMessages(int limit) throws SQLException {
+        Connection connection = getConnection();
+        Statement statement = connection.createStatement();
+
+        String sqlLimit = limit > 0 ? "limit " + limit : "";
+        ResultSet set = statement.executeQuery(
+                "select * from " + Message.MODEL_NAME +
+                        " where " + Message.ROOM_ID + " = " + id +
+                        sqlLimit
+        );
+
+        List<Message> messages = new ArrayList<>();
+        while (set.next()) {
+            messages.add(
+                    Message.makeInstance(set)
+            );
+        }
+
+        statement.close();
+        connection.close();
+
+        return messages;
+    }
+
+    /*
+    Instance methods
+     */
+
+    /**
+     * レコードの更新
+     *
+     * @return 同一のインスタンス
+     * @throws SQLException SQLエラー
+     */
+    public Room update() throws SQLException {
+        Connection connection = getConnection();
+        Statement statement = connection.createStatement();
+
+        if (statement.executeUpdate(
+                "update " + MODEL_NAME +
+                        " set " + NAME + " = '" + name + "', " +
+                        DESCRIPTION + " = '" + description + "', " +
+                        UPDATED_AT + " = '" + now() + "'" +
+                        "where " + ID + " = " + id
+        ) != 1) {
+            throw new SQLException();
+        }
+
+        return this;
     }
 
     /*
@@ -49,11 +127,20 @@ public class Room extends Model {
         Statement statement = connection.createStatement();
 
         if (statement.executeUpdate(
-                "insert into " + MODEL_NAME + "(" + NAME + ", " + DESCRIPTION + ", " + CREATE_TALKER_ID + ") " +
+                "insert into " + MODEL_NAME +
+                        "(" +
+                        NAME + ", " +
+                        DESCRIPTION + ", " +
+                        CREATE_TALKER_ID + ", " +
+                        CREATED_AT + ", " +
+                        UPDATED_AT +
+                        ") " +
                         "VALUES (" +
                         "'" + name + "', " +
                         "'" + description + "', " +
-                        createTalkerId +
+                        createTalkerId + ", " +
+                        "'" + now() + "', " +
+                        "'" + now() + "'" +
                         ")"
         ) != 1) {
             statement.close();
