@@ -33,7 +33,7 @@ public class DatabaseConnectionTest {
         if (set.next()) {
             assertEquals(1, set.getLong("ID"));
         } else {
-            assertTrue(false);
+            fail();
         }
 
         set.close();

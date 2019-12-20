@@ -1,8 +1,12 @@
 package models;
 
+import exceptions.ModelNotFoundException;
+
 import java.sql.*;
 
 public class Talker extends Model {
+    private static final String MODEL_NAME = "Talker";
+
     private long id;
     private String sessionId;
     private Timestamp createdAt;
@@ -39,7 +43,15 @@ public class Talker extends Model {
     Static methods
      */
 
-    static public Talker find(long id) throws SQLException {
+    /**
+     * Talkerを取得
+     *
+     * @param id Talker ID
+     * @return IDが一致したTalkerインスタンス
+     * @throws SQLException           SQLエラー
+     * @throws ModelNotFoundException IDの一致するモデルが存在しなかったとき
+     */
+    static public Talker find(long id) throws SQLException, ModelNotFoundException {
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
@@ -48,7 +60,10 @@ public class Talker extends Model {
                         "from TALKERS where ID = " + id
         );
 
-        set.next();
+        if (!set.next()) {
+            throw new ModelNotFoundException(MODEL_NAME, id);
+        }
+
         Talker model = new Talker(
                 set.getLong(1),
                 set.getString(2),
@@ -56,6 +71,7 @@ public class Talker extends Model {
                 set.getTimestamp(4)
         );
 
+        set.close();
         statement.close();
         connection.close();
 
