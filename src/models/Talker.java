@@ -9,7 +9,7 @@ public class Talker extends Model {
 
     protected String sessionId;
 
-    public Talker(long id, String sessionId, Timestamp createdAt, Timestamp updatedAt) {
+    public Talker(long id, Timestamp createdAt, Timestamp updatedAt, String sessionId) {
         super(id, createdAt, updatedAt);
         this.sessionId = sessionId;
     }
@@ -86,7 +86,7 @@ public class Talker extends Model {
         Statement statement = connection.createStatement();
 
         ResultSet set = statement.executeQuery(
-                "select ID,SESSION_ID,CREATED_AT,UPDATED_AT " +
+                "select ID, SESSION_ID, CREATED_AT, UPDATED_AT " +
                         "from " + MODEL_NAME + " where ID = " + id
         );
 
@@ -100,9 +100,9 @@ public class Talker extends Model {
 
         Talker model = new Talker(
                 set.getLong(1),
-                set.getString(2),
                 set.getTimestamp(3),
-                set.getTimestamp(4)
+                set.getTimestamp(4),
+                set.getString(2)
         );
 
         set.close();
