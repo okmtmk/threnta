@@ -3,10 +3,11 @@ package models;
 import java.sql.*;
 
 public class Message extends Model {
-    protected static final String MODEL_NAME = "MESSAGES";
-    protected static final String TALKER_ID = "TALKER_ID";
-    protected static final String ROOM_ID = "ROOM_ID";
-    protected static final String MESSAGE = "MESSAGE";
+    static final String MODEL_NAME = "MESSAGES";
+
+    static final String TALKER_ID = "TALKER_ID";
+    static final String ROOM_ID = "ROOM_ID";
+    static final String MESSAGE = "MESSAGE";
 
     protected long talkerId;
     protected long roomID;
@@ -44,7 +45,23 @@ public class Message extends Model {
             throw new SQLException();
         }
 
-        Message model = new Message(
+        Message model = makeInstance(set);
+
+        statement.close();
+        connection.close();
+
+        return model;
+    }
+
+    /**
+     * ResultSetからMessageクラスのインスタンスを生成
+     *
+     * @param set Messagesエンティティを検索した結果
+     * @return Messageインスタンス
+     * @throws SQLException SQLエラー
+     */
+    static Message makeInstance(ResultSet set) throws SQLException {
+        return new Message(
                 set.getLong(ID),
                 set.getTimestamp(CREATED_AT),
                 set.getTimestamp(UPDATED_AT),
@@ -52,10 +69,5 @@ public class Message extends Model {
                 set.getLong(ROOM_ID),
                 set.getString(MESSAGE)
         );
-
-        statement.close();
-        connection.close();
-
-        return model;
     }
 }
