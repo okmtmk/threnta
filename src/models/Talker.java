@@ -3,6 +3,8 @@ package models;
 import exceptions.ModelNotFoundException;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Talker extends Model {
     protected static final String MODEL_NAME = "TALKERS";
@@ -24,10 +26,45 @@ public class Talker extends Model {
         return sessionId;
     }
 
+    /**
+     * Talkerが作成したルームを取得
+     *
+     * @return Talkerが作成したルーム
+     * @throws SQLException SQLエラー
+     */
+    public List<Room> getCreatedRooms() throws SQLException {
+        return getCreatedRooms(-1);
+    }
+
+    /**
+     * Talkerが作成したルームを取得
+     *
+     * @param limit 取得件数
+     * @return Talkerが作成したルーム
+     * @throws SQLException SQLエラー
+     */
+    public List<Room> getCreatedRooms(long limit) throws SQLException {
+        Connection connection = getConnection();
+        Statement statement = connection.createStatement();
+
+        String sqlLimit = limit > 0 ? " fetch first " + limit + " rows only " : "";
+
+        ResultSet set = statement.executeQuery(
+                "select * from " + Room.MODEL_NAME + " where " + Room.CREATE_TALKER_ID + " = " + id +
+                        sqlLimit
+        );
+
+        List<Room> rooms = new ArrayList<>();
+        while (set.next()) {
+            rooms.add(Room.makeInstance(set));
+        }
+
+        return rooms;
+    }
+
     /*
     Instance methods
      */
-
 
 
 

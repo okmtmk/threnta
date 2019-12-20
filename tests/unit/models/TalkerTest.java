@@ -36,4 +36,12 @@ public class TalkerTest {
         Talker model = Talker.create(id);
         assertEquals(id, model.getSessionId());
     }
+
+    @Test
+    public void testGetCreatedRooms() throws ModelNotFoundException, SQLException {
+        Talker talker = Talker.find(1);
+
+        assertEquals(1, talker.getCreatedRooms(1).get(0).getId());
+        assertTrue(talker.getCreatedRooms(1).size() > 0);
+    }
 }

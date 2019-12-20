@@ -169,7 +169,23 @@ public class Room extends Model {
             throw new ModelNotFoundException(MODEL_NAME, id);
         }
 
-        Room model = new Room(
+        Room model = makeInstance(set);
+
+        statement.close();
+        connection.close();
+
+        return model;
+    }
+
+    /**
+     * ResultSetからインスタンスを作成する。
+     *
+     * @param set Roomを検索した結果
+     * @return Roomインスタンス
+     * @throws SQLException SQLエラー
+     */
+    static Room makeInstance(ResultSet set) throws SQLException {
+        return new Room(
                 set.getLong(ID),
                 set.getTimestamp(CREATED_AT),
                 set.getTimestamp(UPDATED_AT),
@@ -177,10 +193,5 @@ public class Room extends Model {
                 set.getString(NAME),
                 set.getString(DESCRIPTION)
         );
-
-        statement.close();
-        connection.close();
-
-        return model;
     }
 }
