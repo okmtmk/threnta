@@ -187,13 +187,17 @@ public class Room extends Model {
         Statement statement = connection.createStatement();
 
         ResultSet set = statement.executeQuery(
-                "select * from ROOMS"
+                "select * from ROOMS order by " + Room.CREATED_AT + " desc "
         );
 
         List<Room> rooms = new ArrayList<>();
         while (set.next()) {
             rooms.add(Room.makeInstance(set));
         }
+
+        statement.close();
+        connection.close();
+
         return rooms;
     }
 

@@ -18,12 +18,18 @@ public class RoomServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        List<Room> rooms;
         try {
-            List<Room> rooms = Room.index();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+            rooms = Room.index();
+        } catch (SQLException | ClassNotFoundException e) {
+            request.setAttribute("error", e);
+            request.getRequestDispatcher("/WEB-INF/jsp/rooms/room-list.jsp").forward(request, response);
+            return;
         }
 
+        request.setAttribute("rooms", rooms);
         request.getRequestDispatcher("/WEB-INF/jsp/rooms/room-list.jsp").forward(request, response);
     }
 }
