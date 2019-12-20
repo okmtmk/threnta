@@ -182,6 +182,21 @@ public class Room extends Model {
         return model;
     }
 
+    public static List<Room> index() throws SQLException {
+        Connection connection = getConnection();
+        Statement statement = connection.createStatement();
+
+        ResultSet set = statement.executeQuery(
+                "select * from ROOMS"
+        );
+
+        List<Room> rooms = new ArrayList<>();
+        while (set.next()) {
+            rooms.add(Room.makeInstance(set));
+        }
+        return rooms;
+    }
+
     /**
      * ResultSetからインスタンスを作成する。
      *

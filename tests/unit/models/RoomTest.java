@@ -5,6 +5,7 @@ import models.Room;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -56,5 +57,12 @@ public class RoomTest {
     public void testGetLimitedMessages() throws ModelNotFoundException, SQLException {
         Room model = Room.find(1);
         assertTrue(model.getMessages(10).size() > 0);
+    }
+
+    @Test
+    public void testIndex() throws SQLException {
+        List<Room> rooms = Room.index();
+
+        assertTrue(rooms.size() > 0);
     }
 }
