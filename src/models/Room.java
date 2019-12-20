@@ -112,8 +112,13 @@ public class Room extends Model {
                         UPDATED_AT + " = '" + now() + "'" +
                         "where " + ID + " = " + id
         ) != 1) {
+            statement.close();
+            connection.close();
+
             throw new SQLException();
         }
+        statement.close();
+        connection.close();
 
         return this;
     }

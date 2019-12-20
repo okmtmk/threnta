@@ -13,4 +13,11 @@ public class MessageTest {
         Message model = Message.find(1);
         assertEquals(1, model.getId());
     }
+
+    @Test
+    public void testGetTalker() throws SQLException {
+        Message message = Message.find(1);
+
+        assertEquals(1, message.getTalker().getId());
+    }
 }

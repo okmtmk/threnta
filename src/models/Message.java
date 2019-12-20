@@ -38,6 +38,29 @@ public class Message extends Model {
         return message;
     }
 
+    public Talker getTalker() throws SQLException {
+        Connection connection = getConnection();
+        Statement statement = connection.createStatement();
+
+        ResultSet set = statement.executeQuery(
+                "select * from " + Talker.MODEL_NAME + " where " + Talker.ID + " = " + talkerId
+        );
+
+        if (!set.next()) {
+            statement.close();
+            connection.close();
+
+            throw new SQLException();
+        }
+
+        Talker model = Talker.makeInstance(set);
+
+        statement.close();
+        connection.close();
+
+        return model;
+    }
+
     /*
     Static methods
      */

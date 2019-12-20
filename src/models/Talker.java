@@ -59,6 +59,9 @@ public class Talker extends Model {
             rooms.add(Room.makeInstance(set));
         }
 
+        statement.close();
+        connection.close();
+
         return rooms;
     }
 
@@ -85,6 +88,9 @@ public class Talker extends Model {
             rooms.add(Room.makeInstance(set));
         }
 
+        statement.close();
+        connection.close();
+
         return rooms;
     }
 
@@ -103,7 +109,7 @@ public class Talker extends Model {
      * @return 作成されたTalker
      * @throws SQLException SQLエラー
      */
-    static public Talker create(String sessionId) throws SQLException {
+    public static Talker create(String sessionId) throws SQLException {
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
@@ -146,7 +152,7 @@ public class Talker extends Model {
      * @throws SQLException           SQLエラー
      * @throws ModelNotFoundException IDの一致するモデルが存在しなかったとき
      */
-    static public Talker find(long id) throws SQLException, ModelNotFoundException {
+    public static Talker find(long id) throws SQLException, ModelNotFoundException {
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
@@ -163,17 +169,28 @@ public class Talker extends Model {
             throw new ModelNotFoundException(MODEL_NAME, id);
         }
 
-        Talker model = new Talker(
-                set.getLong(ID),
-                set.getTimestamp(CREATED_AT),
-                set.getTimestamp(UPDATED_AT),
-                set.getString(SESSION_ID)
-        );
+        Talker model = makeInstance(set);
 
         set.close();
         statement.close();
         connection.close();
 
         return model;
+    }
+
+    /**
+     * ResultSetからインスタンスを生成
+     *
+     * @param set Talkersエンティティを検索した結果
+     * @return Talkerインスタンス
+     * @throws SQLException SQLエラー
+     */
+    static Talker makeInstance(ResultSet set) throws SQLException {
+        return new Talker(
+                set.getLong(ID),
+                set.getTimestamp(CREATED_AT),
+                set.getTimestamp(UPDATED_AT),
+                set.getString(SESSION_ID)
+        );
     }
 }
