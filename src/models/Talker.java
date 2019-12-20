@@ -62,6 +62,32 @@ public class Talker extends Model {
         return rooms;
     }
 
+    /**
+     * 自分の発言があるルームを取得
+     *
+     * @return 自分の発言があるルーム
+     * @throws SQLException SQLエラ−
+     */
+    public List<Room> getTalkedRooms() throws SQLException {
+        Connection connection = getConnection();
+        Statement statement = connection.createStatement();
+
+        ResultSet set = statement.executeQuery(
+                "select * from " + Room.MODEL_NAME +
+                        " where " + Room.ID + " = (" +
+                        "select " + Message.ROOM_ID + " from " + Message.MODEL_NAME +
+                        " where " + Message.TALKER_ID + " = " + id +
+                        ")"
+        );
+
+        List<Room> rooms = new ArrayList<>();
+        while (set.next()) {
+            rooms.add(Room.makeInstance(set));
+        }
+
+        return rooms;
+    }
+
     /*
     Instance methods
      */
