@@ -1,6 +1,7 @@
 package models;
 
 import java.sql.*;
+import java.util.Calendar;
 
 abstract class Model {
     protected long id;
@@ -57,5 +58,14 @@ abstract class Model {
         set.next();
 
         return set.getLong("ID");
+    }
+
+    /**
+     * 現在のTimestampを取得
+     *
+     * @return 現在時
+     */
+    protected static Timestamp now() {
+        return new Timestamp(Calendar.getInstance().getTime().getTime());
     }
 }

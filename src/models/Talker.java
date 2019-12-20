@@ -3,7 +3,6 @@ package models;
 import exceptions.ModelNotFoundException;
 
 import java.sql.*;
-import java.util.Calendar;
 
 public class Talker extends Model {
     private static final String MODEL_NAME = "TALKERS";
@@ -29,6 +28,7 @@ public class Talker extends Model {
 
 
 
+
     /*
     Static methods
      */
@@ -42,14 +42,12 @@ public class Talker extends Model {
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
-        Timestamp now = new Timestamp(Calendar.getInstance().getTime().getTime());
-
         //language=sql
         String sql = "insert into " + MODEL_NAME + "(session_id, created_at, updated_at) " +
                 "values (" +
                 "'" + sessionId + "', " +
-                "'" + now + "', " +
-                "'" + now + "'" +
+                "'" + now() + "', " +
+                "'" + now() + "'" +
                 ")";
 
         if (statement.executeLargeUpdate(sql) != 1) {
