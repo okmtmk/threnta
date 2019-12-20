@@ -4,6 +4,10 @@ import java.sql.*;
 import java.util.Calendar;
 
 abstract class Model {
+    protected static final String ID = "ID";
+    protected static final String CREATED_AT = "CREATED_AT";
+    protected static final String UPDATED_AT = "UPDATED_AT";
+
     protected long id;
     protected Timestamp createdAt;
     protected Timestamp updatedAt;

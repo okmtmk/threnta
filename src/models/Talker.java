@@ -5,7 +5,9 @@ import exceptions.ModelNotFoundException;
 import java.sql.*;
 
 public class Talker extends Model {
-    private static final String MODEL_NAME = "TALKERS";
+    protected static final String MODEL_NAME = "TALKERS";
+
+    protected static final String SESSION_ID = "SESSION_ID";
 
     protected String sessionId;
 
@@ -43,7 +45,7 @@ public class Talker extends Model {
         Statement statement = connection.createStatement();
 
         //language=sql
-        String sql = "insert into " + MODEL_NAME + "(session_id, created_at, updated_at) " +
+        String sql = "insert into " + MODEL_NAME + "(" + SESSION_ID + ", " + CREATED_AT + ", " + UPDATED_AT + ") " +
                 "values (" +
                 "'" + sessionId + "', " +
                 "'" + now() + "', " +
@@ -86,8 +88,8 @@ public class Talker extends Model {
         Statement statement = connection.createStatement();
 
         ResultSet set = statement.executeQuery(
-                "select ID, SESSION_ID, CREATED_AT, UPDATED_AT " +
-                        "from " + MODEL_NAME + " where ID = " + id
+                "select ID, SESSION_ID, " + CREATED_AT + ", " + UPDATED_AT + " " +
+                        "from " + MODEL_NAME + " where " + ID + " = " + id
         );
 
         if (!set.next()) {
@@ -99,10 +101,10 @@ public class Talker extends Model {
         }
 
         Talker model = new Talker(
-                set.getLong(1),
-                set.getTimestamp(3),
-                set.getTimestamp(4),
-                set.getString(2)
+                set.getLong(ID),
+                set.getTimestamp(CREATED_AT),
+                set.getTimestamp(UPDATED_AT),
+                set.getString(SESSION_ID)
         );
 
         set.close();
