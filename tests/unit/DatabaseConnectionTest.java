@@ -2,11 +2,9 @@ package unit;
 
 import org.junit.Test;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 public class DatabaseConnectionTest {
     @Test
@@ -17,6 +15,29 @@ public class DatabaseConnectionTest {
                 = DriverManager.getConnection(driver, "okmt", "threnta");
 
         assertFalse(connection.isClosed());
+        connection.close();
+    }
+
+    @Test
+    public void testRead() throws SQLException {
+        Connection connection =
+                DriverManager.getConnection(
+                        "jdbc:derby:/Users/okamoto/Repositories/threnta/database/threnta;",
+                        "okmt",
+                        "threnta"
+                );
+        Statement statement = connection.createStatement();
+
+        ResultSet set = statement.executeQuery("select * from OKMT.TALKERS");
+
+        if (set.next()) {
+            assertEquals(1, set.getLong("ID"));
+        } else {
+            assertTrue(false);
+        }
+
+        set.close();
+        statement.close();
         connection.close();
     }
 }
