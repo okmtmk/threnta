@@ -3,45 +3,77 @@ package models;
 import exceptions.ModelNotFoundException;
 
 import java.sql.*;
+import java.util.Calendar;
 
 public class Talker extends Model {
-    private static final String MODEL_NAME = "Talker";
+    private static final String MODEL_NAME = "TALKERS";
 
-    private long id;
-    private String sessionId;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    protected String sessionId;
 
     public Talker(long id, String sessionId, Timestamp createdAt, Timestamp updatedAt) {
-        this.id = id;
+        super(id, createdAt, updatedAt);
         this.sessionId = sessionId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     /*
     Properties
      */
 
-    public long getId() {
-        return id;
-    }
-
     public String getSessionId() {
         return sessionId;
     }
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
+    /*
+    Instance methods
+     */
 
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
+
 
     /*
     Static methods
      */
+
+    /**
+     * @param sessionId セッションID
+     * @return 作成されたTalker
+     * @throws SQLException SQLエラー
+     */
+    static public Talker create(String sessionId) throws SQLException {
+        Connection connection = getConnection();
+        Statement statement = connection.createStatement();
+
+        Timestamp now = new Timestamp(Calendar.getInstance().getTime().getTime());
+
+        //language=sql
+        String sql = "insert into " + MODEL_NAME + "(session_id, created_at, updated_at) " +
+                "values (" +
+                "'" + sessionId + "', " +
+                "'" + now + "', " +
+                "'" + now + "'" +
+                ")";
+
+        if (statement.executeLargeUpdate(sql) != 1) {
+            statement.close();
+            connection.close();
+
+            throw new SQLException();
+        }
+
+        long id = getLastInsertedId(MODEL_NAME, statement);
+
+        statement.close();
+        connection.close();
+
+        try {
+
+            return find(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            // もし、レコードが見つからない場合はSQL Exceptionを送出
+            throw new SQLException();
+        }
+    }
 
     /**
      * Talkerを取得
@@ -57,10 +89,14 @@ public class Talker extends Model {
 
         ResultSet set = statement.executeQuery(
                 "select ID,SESSION_ID,CREATED_AT,UPDATED_AT " +
-                        "from TALKERS where ID = " + id
+                        "from " + MODEL_NAME + " where ID = " + id
         );
 
         if (!set.next()) {
+            set.close();
+            statement.close();
+            connection.close();
+
             throw new ModelNotFoundException(MODEL_NAME, id);
         }
 

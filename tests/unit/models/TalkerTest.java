@@ -5,6 +5,7 @@ import models.Talker;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -27,5 +28,12 @@ public class TalkerTest {
         } catch (ModelNotFoundException e) {
             assertTrue(true);
         }
+    }
+
+    @Test
+    public void testCreate() throws SQLException {
+        String id = String.valueOf(new Random().nextLong());
+        Talker model = Talker.create(id);
+        assertEquals(id, model.getSessionId());
     }
 }
