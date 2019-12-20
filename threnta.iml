@@ -30,5 +30,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Tomcat 8.5.47" level="application_server_libraries" />
     <orderEntry type="library" name="junit-4.10" level="project" />
     <orderEntry type="library" name="derbyclient-10.14.1.0" level="project" />
+    <orderEntry type="library" name="bootstrap" level="application" />
   </component>
 </module>
