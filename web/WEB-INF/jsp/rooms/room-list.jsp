@@ -14,7 +14,7 @@
 </jsp:include>
 <body class="bg-light">
 <jsp:include page="/WEB-INF/jsp/base/navber.jsp"/>
-<div class="container mt-3">
+<div class="container">
     <h1 class="font-weight-bold">スレッド一覧</h1>
 
     <% if (request.getAttribute("error") != null) {
