@@ -1,6 +1,7 @@
 package unit.models;
 
 import exceptions.ModelNotFoundException;
+import exceptions.SessionIdAlreadyRegisteredException;
 import models.Talker;
 import org.junit.Test;
 
@@ -31,10 +32,28 @@ public class TalkerTest {
     }
 
     @Test
-    public void testCreate() throws SQLException {
+    public void testCreate() throws SQLException, SessionIdAlreadyRegisteredException {
         String id = String.valueOf(new Random().nextLong());
         Talker model = Talker.create(id);
         assertEquals(id, model.getSessionId());
+    }
+
+    @Test
+    public void testCreateExceptFail() {
+        try {
+            Talker.create("test");
+
+            fail();
+        } catch (SQLException e) {
+            fail();
+        } catch (SessionIdAlreadyRegisteredException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
+    public void testIsSessionRegistered() throws SQLException {
+        assertTrue(Talker.isSessionIdRegistered("test"));
     }
 
     @Test

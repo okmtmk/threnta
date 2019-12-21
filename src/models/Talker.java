@@ -1,6 +1,7 @@
 package models;
 
 import exceptions.ModelNotFoundException;
+import exceptions.SessionIdAlreadyRegisteredException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -105,11 +106,18 @@ public class Talker extends Model {
      */
 
     /**
+     * Talkerを作成
+     *
      * @param sessionId セッションID
      * @return 作成されたTalker
-     * @throws SQLException SQLエラー
+     * @throws SQLException                        SQLエラー
+     * @throws SessionIdAlreadyRegisteredException セッションIDが登録済み
      */
-    public static Talker create(String sessionId) throws SQLException {
+    public static Talker create(String sessionId) throws SQLException, SessionIdAlreadyRegisteredException {
+        if (isSessionIdRegistered(sessionId)) {
+            throw new SessionIdAlreadyRegisteredException(sessionId);
+        }
+
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
@@ -176,6 +184,56 @@ public class Talker extends Model {
         connection.close();
 
         return model;
+    }
+
+    /**
+     * セッションIDからTalkerを取得
+     *
+     * @param sessionId セッションID
+     * @return Talker
+     * @throws SQLException SQLエラー
+     */
+    public static Talker findBySessionId(String sessionId) throws SQLException {
+        Connection connection = getConnection();
+        Statement statement = connection.createStatement();
+
+        ResultSet set = statement.executeQuery(
+                "select * from " + MODEL_NAME + " where " + SESSION_ID + " = " + sessionId
+        );
+
+        if (!set.next()) {
+            throw new SQLException();
+        }
+
+        Talker model = makeInstance(set);
+
+        statement.close();
+        connection.close();
+
+        return model;
+    }
+
+    /**
+     * セッションIDがすでに登録済みであるか確認
+     *
+     * @param sessionId セッションID
+     * @return 登録済みかどうか
+     * @throws SQLException SQLエラー
+     */
+    public static boolean isSessionIdRegistered(String sessionId) throws SQLException {
+        Connection connection = getConnection();
+        Statement statement = connection.createStatement();
+
+        ResultSet set = statement.executeQuery(
+                "select * from " + MODEL_NAME + " where " + SESSION_ID + " = '" + sessionId + "'"
+        );
+
+        boolean flag = set.next();
+
+        statement.close();
+        connection.close();
+
+        return flag;
     }
 
     /**
