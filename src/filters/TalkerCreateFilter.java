@@ -17,7 +17,7 @@ public class TalkerCreateFilter implements Filter {
         if (req instanceof HttpServletRequest) {
             HttpServletRequest httpReq = (HttpServletRequest) req;
 
-            HttpSession session = httpReq.getSession();
+            HttpSession session = httpReq.getSession(true);
 
             try {
                 Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
@@ -28,6 +28,7 @@ public class TalkerCreateFilter implements Filter {
                 throw new ServletException("ユーザ登録に失敗しました。" + e.getLocalizedMessage());
             }
         }
+
         chain.doFilter(req, resp);
     }
 

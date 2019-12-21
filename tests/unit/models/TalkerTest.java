@@ -70,4 +70,11 @@ public class TalkerTest {
         assertEquals(1, talker.getTalkedRooms().get(0).getId(), 1);
         assertTrue(talker.getTalkedRooms().size() > 0);
     }
+
+    @Test
+    public void testFindBySessionId() throws SQLException {
+        Talker talker = Talker.findBySessionId("7EE77DDC9CDE1829065A3813AE06069A");
+
+        assertEquals("7EE77DDC9CDE1829065A3813AE06069A", talker.getSessionId());
+    }
 }

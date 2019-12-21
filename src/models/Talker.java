@@ -198,10 +198,12 @@ public class Talker extends Model {
         Statement statement = connection.createStatement();
 
         ResultSet set = statement.executeQuery(
-                "select * from " + MODEL_NAME + " where " + SESSION_ID + " = " + sessionId
+                "select * from " + MODEL_NAME + " where " + SESSION_ID + " = '" + sessionId + "'"
         );
 
         if (!set.next()) {
+            statement.close();
+            connection.close();
             throw new SQLException();
         }
 
