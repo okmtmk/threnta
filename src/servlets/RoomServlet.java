@@ -13,10 +13,6 @@ import java.util.List;
 
 @WebServlet("/")
 public class RoomServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         List<Room> rooms;
