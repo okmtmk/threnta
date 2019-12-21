@@ -156,6 +156,10 @@ public class Room extends Model {
 
         try {
             long id = getLastInsertedId(MODEL_NAME, statement);
+
+            statement.close();
+            connection.close();
+
             return find(id);
         } catch (Exception e) {
             throw new SQLException();
@@ -171,6 +175,9 @@ public class Room extends Model {
         );
 
         if (!set.next()) {
+            statement.close();
+            connection.close();
+
             throw new ModelNotFoundException(MODEL_NAME, id);
         }
 
