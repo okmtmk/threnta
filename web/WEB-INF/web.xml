@@ -25,4 +25,12 @@
         <filter-name>CharacterEncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <filter>
+        <filter-name>TalkerCreateFilter</filter-name>
+        <filter-class>filters.TalkerCreateFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>TalkerCreateFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>
