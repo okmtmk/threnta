@@ -1,5 +1,6 @@
 package models;
 
+import builder.models.room.RoomQuery;
 import exceptions.ModelNotFoundException;
 
 import java.sql.ResultSet;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Room extends Model {
-    static final String MODEL_NAME = "ROOMS";
+    public static final String MODEL_NAME = "ROOMS";
 
     static final String CREATE_TALKER_ID = "CREATE_TALKER_ID";
     static final String NAME = "NAME";
@@ -26,6 +27,8 @@ public class Room extends Model {
         this.createTalkerId = createTalkerId;
         this.name = name;
         this.description = description;
+
+        select = new RoomQuery();
     }
 
     /*

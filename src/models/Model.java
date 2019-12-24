@@ -1,5 +1,6 @@
 package models;
 
+import builder.queries.Query;
 import exceptions.ModelNotFoundException;
 import interfaces.FindStatementHandler;
 import interfaces.StatementHandler;
@@ -15,6 +16,7 @@ abstract public class Model {
     protected long id;
     protected Timestamp createdAt;
     protected Timestamp updatedAt;
+    protected Query select;
 
     public Model(long id, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;

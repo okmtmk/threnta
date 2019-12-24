@@ -1,10 +1,10 @@
 package builder.queries;
 
-public abstract class Command {
+public class Limit {
     String command;
 
-    public Command(String command) {
-        this.command = command;
+    public Limit(long limit) {
+        command = "fetch first " + limit + " rows only";
     }
 
     public String getCommand() {

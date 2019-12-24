@@ -1,11 +1,17 @@
 package builder.queries;
 
-public class Where extends Command {
+public class Where {
+    String command;
+
     public Where(String column, String operator, long value) {
-        super(column + " " + operator + " " + value);
+        command = column + " " + operator + " " + value;
     }
 
     public Where(String column, String operator, String value) {
-        super(column + " " + operator + " '" + value + "'");
+        command = column + " " + operator + " " + value;
+    }
+
+    public String getCommand() {
+        return command;
     }
 }
