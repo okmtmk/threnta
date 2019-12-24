@@ -1,13 +1,15 @@
 package models;
 
+import builder.models.room.MessageQuery;
+
 import java.sql.*;
 
 public class Message extends Model {
-    static final String MODEL_NAME = "MESSAGES";
+    public static final String MODEL_NAME = "MESSAGES";
 
-    static final String TALKER_ID = "TALKER_ID";
-    static final String ROOM_ID = "ROOM_ID";
-    static final String MESSAGE = "MESSAGE";
+    public static final String TALKER_ID = "TALKER_ID";
+    public static final String ROOM_ID = "ROOM_ID";
+    public static final String MESSAGE = "MESSAGE";
 
     protected long talkerId;
     protected long roomID;
@@ -108,5 +110,9 @@ public class Message extends Model {
                 set.getLong(ROOM_ID),
                 set.getString(MESSAGE)
         );
+    }
+
+    public static MessageQuery select() {
+        return new MessageQuery();
     }
 }

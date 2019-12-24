@@ -12,9 +12,9 @@ import java.util.List;
 public class Room extends Model {
     public static final String MODEL_NAME = "ROOMS";
 
-    static final String CREATE_TALKER_ID = "CREATE_TALKER_ID";
-    static final String NAME = "NAME";
-    static final String DESCRIPTION = "DESCRIPTION";
+    public static final String CREATE_TALKER_ID = "CREATE_TALKER_ID";
+    public static final String NAME = "NAME";
+    public static final String DESCRIPTION = "DESCRIPTION";
 
     protected long createTalkerId;
     protected String name;
@@ -27,8 +27,6 @@ public class Room extends Model {
         this.createTalkerId = createTalkerId;
         this.name = name;
         this.description = description;
-
-        select = new RoomQuery();
     }
 
     /*
@@ -75,13 +73,13 @@ public class Room extends Model {
     public List<Message> getMessages(int limit) throws SQLException {
         List<Message> messages = new ArrayList<>();
         executeSQL(statement -> {
-            String sqlLimit = limit > 0 ? " fetch first " + limit + " rows only " : "";
-            ResultSet set = statement.executeQuery(
-                    "select * from " + Message.MODEL_NAME +
-                            " where " + Message.ROOM_ID + " = " + id +
-                            sqlLimit
-            );
 
+            ResultSet set;
+            if (limit > 0) {
+                set = Message.select().limit(limit).get(statement);
+            } else {
+                set = Message.select().get(statement);
+            }
             while (set.next()) {
                 messages.add(
                         Message.makeInstance(set)
@@ -155,9 +153,8 @@ public class Room extends Model {
 
     public static Room find(long id) throws SQLException, ModelNotFoundException {
         return (Room) executeFind(statement -> {
-            ResultSet set = statement.executeQuery(
-                    "select * from " + MODEL_NAME + " where " + ID + " = " + id
-            );
+            ResultSet set = select().scopeId(id).get(statement);
+
             if (!set.next()) {
                 throw new ModelNotFoundException(MODEL_NAME, id);
             }
@@ -169,9 +166,7 @@ public class Room extends Model {
         List<Room> rooms = new ArrayList<>();
 
         executeSQL(statement -> {
-            ResultSet set = statement.executeQuery(
-                    "select * from ROOMS order by " + Room.CREATED_AT + " desc "
-            );
+            ResultSet set = select().desc(Room.CREATED_AT).get(statement);
             while (set.next()) {
                 rooms.add(Room.makeInstance(set));
             }
@@ -196,5 +191,9 @@ public class Room extends Model {
                 set.getString(NAME),
                 set.getString(DESCRIPTION)
         );
+    }
+
+    public static RoomQuery select() {
+        return new RoomQuery();
     }
 }

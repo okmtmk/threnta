@@ -1,7 +1,5 @@
 package builder.queries;
 
-import builder.models.room.RoomQuery;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,6 +10,7 @@ public abstract class Query {
     private String command;
     private List<Where> wheres;
     private Limit limit = null;
+    private OrderBy orderBy = null;
 
     public Query(String modelName) {
         this.command = "select * from " + modelName;
@@ -49,6 +48,11 @@ public abstract class Query {
             sql.append(limit.getCommand());
         }
 
+        if (orderBy != null) {
+            sql.append(" ");
+            sql.append(orderBy.getCommand());
+        }
+
         return statement.executeQuery(sql.toString());
     }
 
@@ -60,6 +64,16 @@ public abstract class Query {
 
     public Query limit(long limit) {
         addLimit(new Limit(limit));
+        return this;
+    }
+
+    public Query desc(String column) {
+        orderBy = new OrderBy(column, "desc");
+        return this;
+    }
+
+    public Query asc(String column) {
+        orderBy = new OrderBy(column, "asc");
         return this;
     }
 }

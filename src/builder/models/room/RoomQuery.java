@@ -1,6 +1,5 @@
 package builder.models.room;
 
-import builder.queries.Limit;
 import builder.queries.Query;
 import builder.queries.Where;
 import models.Room;
@@ -11,7 +10,7 @@ public class RoomQuery extends Query {
     }
 
     public RoomQuery scopeCreateTalkerId(long talkerId) {
-        addWhere(new Where("create_talker_id", "=", talkerId));
+        addWhere(new Where(Room.CREATE_TALKER_ID, "=", talkerId));
         return this;
     }
 }

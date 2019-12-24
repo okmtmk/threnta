@@ -16,7 +16,6 @@ abstract public class Model {
     protected long id;
     protected Timestamp createdAt;
     protected Timestamp updatedAt;
-    protected Query select;
 
     public Model(long id, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
