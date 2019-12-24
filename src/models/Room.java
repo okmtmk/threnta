@@ -2,7 +2,9 @@ package models;
 
 import exceptions.ModelNotFoundException;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,26 +70,21 @@ public class Room extends Model {
      * @throws SQLException SQLエラー
      */
     public List<Message> getMessages(int limit) throws SQLException {
-        Connection connection = getConnection();
-        Statement statement = connection.createStatement();
-
-        String sqlLimit = limit > 0 ? " fetch first " + limit + " rows only " : "";
-        ResultSet set = statement.executeQuery(
-                "select * from " + Message.MODEL_NAME +
-                        " where " + Message.ROOM_ID + " = " + id +
-                        sqlLimit
-        );
-
         List<Message> messages = new ArrayList<>();
-        while (set.next()) {
-            messages.add(
-                    Message.makeInstance(set)
+        executeSQL(statement -> {
+            String sqlLimit = limit > 0 ? " fetch first " + limit + " rows only " : "";
+            ResultSet set = statement.executeQuery(
+                    "select * from " + Message.MODEL_NAME +
+                            " where " + Message.ROOM_ID + " = " + id +
+                            sqlLimit
             );
-        }
 
-        statement.close();
-        connection.close();
-
+            while (set.next()) {
+                messages.add(
+                        Message.makeInstance(set)
+                );
+            }
+        });
         return messages;
     }
 
@@ -102,24 +99,17 @@ public class Room extends Model {
      * @throws SQLException SQLエラー
      */
     public Room update() throws SQLException {
-        Connection connection = getConnection();
-        Statement statement = connection.createStatement();
-
-        if (statement.executeUpdate(
-                "update " + MODEL_NAME +
-                        " set " + NAME + " = '" + name + "', " +
-                        DESCRIPTION + " = '" + description + "', " +
-                        UPDATED_AT + " = '" + now() + "'" +
-                        "where " + ID + " = " + id
-        ) != 1) {
-            statement.close();
-            connection.close();
-
-            throw new SQLException();
-        }
-        statement.close();
-        connection.close();
-
+        executeSQL(statement -> {
+            if (statement.executeUpdate(
+                    "update " + MODEL_NAME +
+                            " set " + NAME + " = '" + name + "', " +
+                            DESCRIPTION + " = '" + description + "', " +
+                            UPDATED_AT + " = '" + now() + "'" +
+                            "where " + ID + " = " + id
+            ) != 1) {
+                throw new SQLException();
+            }
+        });
         return this;
     }
 
@@ -128,82 +118,61 @@ public class Room extends Model {
      */
 
     public static Room create(long createTalkerId, String name, String description) throws SQLException {
-        Connection connection = getConnection();
-        Statement statement = connection.createStatement();
+        final List<Room> rooms = new ArrayList<>();
+        executeSQL(statement -> {
+            if (statement.executeUpdate(
+                    "insert into " + MODEL_NAME +
+                            "(" +
+                            NAME + ", " +
+                            DESCRIPTION + ", " +
+                            CREATE_TALKER_ID + ", " +
+                            CREATED_AT + ", " +
+                            UPDATED_AT +
+                            ") " +
+                            "VALUES (" +
+                            "'" + name + "', " +
+                            "'" + description + "', " +
+                            createTalkerId + ", " +
+                            "'" + now() + "', " +
+                            "'" + now() + "'" +
+                            ")"
+            ) != 1) {
+                throw new SQLException();
+            }
 
-        if (statement.executeUpdate(
-                "insert into " + MODEL_NAME +
-                        "(" +
-                        NAME + ", " +
-                        DESCRIPTION + ", " +
-                        CREATE_TALKER_ID + ", " +
-                        CREATED_AT + ", " +
-                        UPDATED_AT +
-                        ") " +
-                        "VALUES (" +
-                        "'" + name + "', " +
-                        "'" + description + "', " +
-                        createTalkerId + ", " +
-                        "'" + now() + "', " +
-                        "'" + now() + "'" +
-                        ")"
-        ) != 1) {
-            statement.close();
-            connection.close();
-
-            throw new SQLException();
-        }
-
-        try {
-            long id = getLastInsertedId(MODEL_NAME, statement);
-
-            statement.close();
-            connection.close();
-
-            return find(id);
-        } catch (Exception e) {
-            throw new SQLException();
-        }
+            try {
+                long id = getLastInsertedId(MODEL_NAME, statement);
+                rooms.add(find(id));
+            } catch (Exception e) {
+                throw new SQLException();
+            }
+        });
+        return rooms.get(0);
     }
 
     public static Room find(long id) throws SQLException, ModelNotFoundException {
-        Connection connection = getConnection();
-        Statement statement = connection.createStatement();
-
-        ResultSet set = statement.executeQuery(
-                "select * from " + MODEL_NAME + " where " + ID + " = " + id
-        );
-
-        if (!set.next()) {
-            statement.close();
-            connection.close();
-
-            throw new ModelNotFoundException(MODEL_NAME, id);
-        }
-
-        Room model = makeInstance(set);
-
-        statement.close();
-        connection.close();
-
-        return model;
+        return (Room) executeFind(statement -> {
+            ResultSet set = statement.executeQuery(
+                    "select * from " + MODEL_NAME + " where " + ID + " = " + id
+            );
+            if (!set.next()) {
+                throw new ModelNotFoundException(MODEL_NAME, id);
+            }
+            return makeInstance(set);
+        });
     }
 
     public static List<Room> index() throws SQLException {
-        Connection connection = getConnection();
-        Statement statement = connection.createStatement();
-
-        ResultSet set = statement.executeQuery(
-                "select * from ROOMS order by " + Room.CREATED_AT + " desc "
-        );
-
         List<Room> rooms = new ArrayList<>();
-        while (set.next()) {
-            rooms.add(Room.makeInstance(set));
-        }
 
-        statement.close();
-        connection.close();
+        executeSQL(statement -> {
+            ResultSet set = statement.executeQuery(
+                    "select * from ROOMS order by " + Room.CREATED_AT + " desc "
+            );
+            while (set.next()) {
+                rooms.add(Room.makeInstance(set));
+            }
+        });
 
         return rooms;
     }

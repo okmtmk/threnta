@@ -1,11 +1,13 @@
 package models;
 
+import exceptions.ModelNotFoundException;
+import interfaces.FindStatementHandler;
 import interfaces.StatementHandler;
 
 import java.sql.*;
 import java.util.Calendar;
 
-abstract class Model {
+abstract public class Model {
     static final String ID = "ID";
     static final String CREATED_AT = "CREATED_AT";
     static final String UPDATED_AT = "UPDATED_AT";
@@ -81,13 +83,35 @@ abstract class Model {
      * @param callable 実行するクラス
      * @throws SQLException SQLエラー
      */
-    protected static void execute(StatementHandler callable) throws SQLException {
+    protected static void executeSQL(StatementHandler callable) throws SQLException {
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
-        callable.execute(statement);
+        try {
+            callable.execute(statement);
+        } finally {
+            statement.close();
+            connection.close();
+        }
+    }
 
-        statement.close();
-        connection.close();
+    /**
+     * 単一モデルの取得
+     *
+     * @param callable 実行するクラス
+     * @return モデル
+     * @throws SQLException SQLエラー
+     */
+    protected static Model executeFind(FindStatementHandler callable) throws SQLException, ModelNotFoundException {
+        Connection connection = getConnection();
+        Statement statement = connection.createStatement();
+        Model model;
+        try {
+            model = callable.execute(statement);
+        } finally {
+            statement.close();
+            connection.close();
+        }
+        return model;
     }
 }
