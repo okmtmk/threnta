@@ -1,4 +1,4 @@
-package builder.models.messages;
+package builder.models;
 
 import builder.queries.Query;
 import builder.queries.Where;

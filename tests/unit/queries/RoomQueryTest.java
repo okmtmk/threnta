@@ -1,6 +1,6 @@
 package unit.queries;
 
-import builder.models.room.RoomQuery;
+import builder.models.RoomQuery;
 import org.junit.Test;
 
 import java.sql.*;

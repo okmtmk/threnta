@@ -1,6 +1,6 @@
 package models;
 
-import builder.models.room.RoomQuery;
+import builder.models.RoomQuery;
 import exceptions.ModelNotFoundException;
 
 import java.sql.ResultSet;

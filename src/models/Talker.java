@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Talker extends Model {
-    protected static final String MODEL_NAME = "TALKERS";
-
-    protected static final String SESSION_ID = "SESSION_ID";
+    public static final String MODEL_NAME = "TALKERS";
+    public static final String SESSION_ID = "SESSION_ID";
 
     protected String sessionId;
 
