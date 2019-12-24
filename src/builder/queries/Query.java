@@ -1,5 +1,7 @@
 package builder.queries;
 
+import builder.models.room.RoomQuery;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -53,6 +55,11 @@ public abstract class Query {
     public Query scopeId(long id) {
         addWhere(new Where("id", "=", id));
 
+        return this;
+    }
+
+    public Query limit(long limit) {
+        addLimit(new Limit(limit));
         return this;
     }
 }

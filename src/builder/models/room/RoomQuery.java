@@ -14,9 +14,4 @@ public class RoomQuery extends Query {
         addWhere(new Where("create_talker_id", "=", talkerId));
         return this;
     }
-
-    public RoomQuery limit(long limit) {
-        addLimit(new Limit(limit));
-        return this;
-    }
 }

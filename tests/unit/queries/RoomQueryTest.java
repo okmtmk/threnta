@@ -71,4 +71,36 @@ public class RoomQueryTest {
         statement.close();
         connection.close();
     }
+
+    @Test
+    public void testLimit() throws SQLException {
+        RoomQuery select = new RoomQuery();
+
+        String driver = "jdbc:derby:/Users/okamoto/Repositories/threnta/database/threnta;";
+        Connection connection
+                = DriverManager.getConnection(driver, "okmt", "threnta");
+        Statement statement = connection.createStatement();
+
+        ResultSet set = select.limit(1).get(statement);
+        assertTrue(set.next());
+
+        statement.close();
+        connection.close();
+    }
+
+    @Test
+    public void testAll() throws SQLException {
+        RoomQuery select = new RoomQuery();
+
+        String driver = "jdbc:derby:/Users/okamoto/Repositories/threnta/database/threnta;";
+        Connection connection
+                = DriverManager.getConnection(driver, "okmt", "threnta");
+        Statement statement = connection.createStatement();
+
+        ResultSet set = select.scopeCreateTalkerId(1).scopeId(1).limit(1).get(statement);
+        assertTrue(set.next());
+
+        statement.close();
+        connection.close();
+    }
 }
