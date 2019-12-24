@@ -28,21 +28,13 @@
     %>
 
     <div class="row">
-        <% for (Room it : rooms) { %>
+        <%
+            for (Room it : rooms) {
+                request.setAttribute("room", it);
+        %>
         <div class="col-12 mb-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <h6 class="card-title">
-                        <%=it.getName()%>
-                    </h6>
-                    <p class="text-muted">
-                        <%=it.getDescription()%>
-                    </p>
-                    <p class="text-muted text-right">
-                        作成日時 : <%=it.getCreatedAt()%>
-                    </p>
-                </div>
-            </div>
+
+            <jsp:include page="/WEB-INF/jsp/components/room-card.jsp"/>
         </div>
         <% } %>
     </div>
