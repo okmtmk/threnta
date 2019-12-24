@@ -1,6 +1,6 @@
 package models;
 
-import builder.models.room.MessageQuery;
+import builder.models.messages.MessageQuery;
 
 import java.sql.*;
 

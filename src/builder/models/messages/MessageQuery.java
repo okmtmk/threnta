@@ -1,4 +1,4 @@
-package builder.models.room;
+package builder.models.messages;
 
 import builder.queries.Query;
 import builder.queries.Where;
