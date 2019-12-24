@@ -9,11 +9,11 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<jsp:include page="/WEB-INF/jsp/base/head.jsp">
+<jsp:include page="/WEB-INF/jsp/views/base/head.jsp">
     <jsp:param name="title" value="スレッド一覧"/>
 </jsp:include>
 <body class="bg-light">
-<jsp:include page="/WEB-INF/jsp/base/navber.jsp"/>
+<jsp:include page="/WEB-INF/jsp/views/base/navber.jsp"/>
 <div class="container">
     <h1 class="font-weight-bold">スレッド一覧</h1>
 

@@ -21,11 +21,11 @@ public class RoomServlet extends HttpServlet {
             rooms = Room.index();
         } catch (SQLException | ClassNotFoundException e) {
             request.setAttribute("error", e);
-            request.getRequestDispatcher("/WEB-INF/jsp/rooms/room-list.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/views/rooms/room-list.jsp").forward(request, response);
             return;
         }
 
         request.setAttribute("rooms", rooms);
-        request.getRequestDispatcher("/WEB-INF/jsp/rooms/room-list.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/views/rooms/room-list.jsp").forward(request, response);
     }
 }

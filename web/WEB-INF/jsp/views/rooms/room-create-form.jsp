@@ -7,11 +7,11 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<jsp:include page="/WEB-INF/jsp/base/head.jsp">
+<jsp:include page="/WEB-INF/jsp/views/base/head.jsp">
     <jsp:param name="title" value="スレッドの作成"/>
 </jsp:include>
 <body>
-<jsp:include page="/WEB-INF/jsp/base/navber.jsp"/>
+<jsp:include page="/WEB-INF/jsp/views/base/navber.jsp"/>
 <div class="container">
     <div class="card">
         <div class="card-body">

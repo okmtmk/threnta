@@ -54,6 +54,6 @@ public class RoomCreateServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/jsp/rooms/room-create-form.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/views/rooms/room-create-form.jsp").forward(request, response);
     }
 }
