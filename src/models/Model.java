@@ -1,5 +1,7 @@
 package models;
 
+import interfaces.StatementHandler;
+
 import java.sql.*;
 import java.util.Calendar;
 
@@ -71,5 +73,21 @@ abstract class Model {
      */
     protected static Timestamp now() {
         return new Timestamp(Calendar.getInstance().getTime().getTime());
+    }
+
+    /**
+     * ステートメントの生成と開放を自動で行う
+     *
+     * @param callable 実行するクラス
+     * @throws SQLException SQLエラー
+     */
+    protected static void execute(StatementHandler callable) throws SQLException {
+        Connection connection = getConnection();
+        Statement statement = connection.createStatement();
+
+        callable.execute(statement);
+
+        statement.close();
+        connection.close();
     }
 }
