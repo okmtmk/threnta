@@ -54,31 +54,6 @@ public class Room extends Model {
     }
 
     /*
-    Instance methods
-     */
-
-    /**
-     * レコードの更新
-     *
-     * @return 同一のインスタンス
-     * @throws SQLException SQLエラー
-     */
-    public Room update() throws SQLException {
-        executeSQL(statement -> {
-            if (statement.executeUpdate(
-                    "update " + MODEL_NAME +
-                            " set " + NAME + " = '" + name + "', " +
-                            DESCRIPTION + " = '" + description + "', " +
-                            UPDATED_AT + " = '" + now() + "'" +
-                            "where " + ID + " = " + id
-            ) != 1) {
-                throw new SQLException();
-            }
-        });
-        return this;
-    }
-
-    /*
     Static methods
      */
 
@@ -152,6 +127,31 @@ public class Room extends Model {
     }
 
     /*
+    Instance methods
+     */
+
+    /**
+     * レコードの更新
+     *
+     * @return 同一のインスタンス
+     * @throws SQLException SQLエラー
+     */
+    public Room update() throws SQLException {
+        executeSQL(statement -> {
+            if (statement.executeUpdate(
+                    "update " + MODEL_NAME +
+                            " set " + NAME + " = '" + name + "', " +
+                            DESCRIPTION + " = '" + description + "', " +
+                            UPDATED_AT + " = '" + now() + "'" +
+                            "where " + ID + " = " + id
+            ) != 1) {
+                throw new SQLException();
+            }
+        });
+        return this;
+    }
+
+    /*
     Queries
      */
 
@@ -175,9 +175,10 @@ public class Room extends Model {
         List<Room> rooms = new ArrayList<>();
         executeSQL(statement -> {
             ResultSet set = statement.executeQuery(
-                    "select * from ROOMS where " + ID + " = " +
-                            "(select " + Message.ROOM_ID + " from " + Message.MODEL_NAME +
-                            " where " + Message.TALKER_ID + " = " + talkerId + ")"
+                    "select * from " + MODEL_NAME +
+                            " inner join " + Message.MODEL_NAME +
+                            " on(" + MODEL_NAME + "." + ID + " = " + Message.MODEL_NAME + "." + Message.ROOM_ID + ") " +
+                            "where " + Message.MODEL_NAME + "." + Message.TALKER_ID + " = " + talkerId
             );
             while (set.next()) {
                 rooms.add(makeInstance(set));

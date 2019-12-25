@@ -11,6 +11,12 @@ import static org.junit.Assert.*;
 
 public class RoomTest {
     @Test
+    public void testCreate() throws SQLException, ModelNotFoundException {
+        Room model = Room.create(1, "test", "");
+        assertEquals("test", model.getName());
+    }
+
+    @Test
     public void testFind() throws ModelNotFoundException, SQLException {
         Room model = Room.find(1);
 
@@ -31,9 +37,10 @@ public class RoomTest {
     }
 
     @Test
-    public void testCreate() throws SQLException, ModelNotFoundException {
-        Room model = Room.create(1, "test", "");
-        assertEquals("test", model.getName());
+    public void testGet() throws SQLException {
+        List<Room> rooms = Room.get();
+
+        assertTrue(rooms.size() > 0);
     }
 
     @Test
@@ -46,6 +53,18 @@ public class RoomTest {
     }
 
     @Test
+    public void testGetRoomsByCreatedTalkerId() throws SQLException {
+        List<Room> rooms = Room.getRoomsByCreatedTalkerId(1);
+        assertTrue(rooms.size() > 0);
+    }
+
+    @Test
+    public void testGetRoomsByTalkedTalkerId() throws SQLException {
+        List<Room> rooms = Room.getRoomsByTalkedTalkerId(1);
+        assertTrue(rooms.size() > 0);
+    }
+
+    @Test
     public void testGetMessages() throws ModelNotFoundException, SQLException {
         Room model = Room.find(1);
 
@@ -54,9 +73,8 @@ public class RoomTest {
     }
 
     @Test
-    public void testIndex() throws SQLException {
-        List<Room> rooms = Room.get();
-
-        assertTrue(rooms.size() > 0);
+    public void testGetCreateTalker() throws ModelNotFoundException, SQLException {
+        Room model = Room.find(1);
+        assertEquals(1, model.getCreateTalker().getId());
     }
 }
