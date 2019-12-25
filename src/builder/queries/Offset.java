@@ -1,10 +1,10 @@
 package builder.queries;
 
-public class Limit {
+public class Offset {
     private String command;
 
-    public Limit(long limit) {
-        command = "fetch first " + limit + " rows only";
+    public Offset(long offset) {
+        command = "offset " + offset + " rows";
     }
 
     public String getCommand() {

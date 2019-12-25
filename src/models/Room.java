@@ -53,42 +53,6 @@ public class Room extends Model {
         this.description = description;
     }
 
-    /**
-     * 関連するメッセージを全件取得
-     *
-     * @return メッセージ
-     * @throws SQLException SQLエラー
-     */
-    public List<Message> getMessages() throws SQLException {
-        return getMessages(-1);
-    }
-
-    /**
-     * 関連するメッセージを指定件数取得
-     *
-     * @param limit 取得する数
-     * @return メッセージ
-     * @throws SQLException SQLエラー
-     */
-    public List<Message> getMessages(int limit) throws SQLException {
-        List<Message> messages = new ArrayList<>();
-        executeSQL(statement -> {
-
-            ResultSet set;
-            if (limit > 0) {
-                set = Message.select().limit(limit).get(statement);
-            } else {
-                set = Message.select().get(statement);
-            }
-            while (set.next()) {
-                messages.add(
-                        Message.makeInstance(set)
-                );
-            }
-        });
-        return messages;
-    }
-
     /*
     Instance methods
      */
@@ -118,9 +82,8 @@ public class Room extends Model {
     Static methods
      */
 
-    public static Room create(long createTalkerId, String name, String description) throws SQLException {
-        final List<Room> rooms = new ArrayList<>();
-        executeSQL(statement -> {
+    public static Room create(long createTalkerId, String name, String description) throws SQLException, ModelNotFoundException {
+        return (Room) executeFind(statement -> {
             if (statement.executeUpdate(
                     "insert into " + MODEL_NAME +
                             "(" +
@@ -141,14 +104,9 @@ public class Room extends Model {
                 throw new SQLException();
             }
 
-            try {
-                long id = getLastInsertedId(MODEL_NAME, statement);
-                rooms.add(find(id));
-            } catch (Exception e) {
-                throw new SQLException();
-            }
+            long id = getLastInsertedId(MODEL_NAME, statement);
+            return find(id);
         });
-        return rooms.get(0);
     }
 
     public static Room find(long id) throws SQLException, ModelNotFoundException {
@@ -162,7 +120,7 @@ public class Room extends Model {
         });
     }
 
-    public static List<Room> index() throws SQLException {
+    public static List<Room> get() throws SQLException {
         List<Room> rooms = new ArrayList<>();
 
         executeSQL(statement -> {
@@ -193,7 +151,70 @@ public class Room extends Model {
         );
     }
 
+    /*
+    Queries
+     */
+
     public static RoomQuery select() {
         return new RoomQuery();
+    }
+
+    public static List<Room> getRoomsByCreatedTalkerId(long createdTalkerId) throws SQLException {
+        List<Room> rooms = new ArrayList<>();
+        executeSQL(statement -> {
+            ResultSet set = select().scopeCreateTalkerId(createdTalkerId).get(statement);
+
+            while (set.next()) {
+                rooms.add(makeInstance(set));
+            }
+        });
+        return rooms;
+    }
+
+    public static List<Room> getRoomsByTalkedTalkerId(long talkerId) throws SQLException {
+        List<Room> rooms = new ArrayList<>();
+        executeSQL(statement -> {
+            ResultSet set = select().scopeTalkedTalkerId(talkerId).get(statement);
+            while (set.next()) {
+                rooms.add(makeInstance(set));
+            }
+        });
+        return rooms;
+    }
+
+    /*
+    Relations
+     */
+
+    /**
+     * 関連するメッセージを全件取得
+     *
+     * @return メッセージ
+     * @throws SQLException SQLエラー
+     */
+    public List<Message> getMessages() throws SQLException {
+        return getMessages(-1);
+    }
+
+    /**
+     * 関連するメッセージを指定件数取得
+     *
+     * @param limit 取得する数
+     * @return メッセージ
+     * @throws SQLException SQLエラー
+     */
+    public List<Message> getMessages(int limit) throws SQLException {
+        return Message.getMessagesByRoomId(id, limit);
+    }
+
+    /**
+     * 作成ユーザの取得
+     *
+     * @return スレッド作成ユーザ
+     * @throws SQLException           SQLエラー
+     * @throws ModelNotFoundException 作成ユーザが見つからないエラー
+     */
+    public Talker getCreateTalker() throws SQLException, ModelNotFoundException {
+        return Talker.find(createTalkerId);
     }
 }

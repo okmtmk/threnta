@@ -9,6 +9,7 @@ import java.util.List;
 public abstract class Query {
     private String command;
     private List<Where> wheres;
+    private Offset offset = null;
     private Limit limit = null;
     private OrderBy orderBy = null;
 
@@ -22,7 +23,11 @@ public abstract class Query {
         wheres.add(where);
     }
 
-    public void addLimit(Limit limit) {
+    public void setOffset(Offset offset) {
+        this.offset = offset;
+    }
+
+    public void setLimit(Limit limit) {
         this.limit = limit;
     }
 
@@ -41,6 +46,11 @@ public abstract class Query {
                 }
                 sql.append(it.getCommand());
             }
+        }
+
+        if (offset != null) {
+            sql.append(" ");
+            sql.append(offset.getCommand());
         }
 
         if (limit != null) {
@@ -63,7 +73,7 @@ public abstract class Query {
     }
 
     public Query limit(long limit) {
-        addLimit(new Limit(limit));
+        setLimit(new Limit(limit));
         return this;
     }
 

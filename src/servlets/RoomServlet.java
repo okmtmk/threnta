@@ -18,7 +18,7 @@ public class RoomServlet extends HttpServlet {
         List<Room> rooms;
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-            rooms = Room.index();
+            rooms = Room.get();
         } catch (SQLException | ClassNotFoundException e) {
             request.setAttribute("error", e);
             request.getRequestDispatcher("/WEB-INF/jsp/views/rooms/room-list.jsp").forward(request, response);

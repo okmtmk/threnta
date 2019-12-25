@@ -1,8 +1,11 @@
 package models;
 
 import builder.models.MessageQuery;
+import exceptions.ModelNotFoundException;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Message extends Model {
     public static final String MODEL_NAME = "MESSAGES";
@@ -12,15 +15,15 @@ public class Message extends Model {
     public static final String MESSAGE = "MESSAGE";
 
     protected long talkerId;
-    protected long roomID;
+    protected long roomId;
     protected String message;
 
     public Message(
-            long id, Timestamp createdAt, Timestamp updatedAt, long talkerId, long roomID, String message
+            long id, Timestamp createdAt, Timestamp updatedAt, long talkerId, long roomId, String message
     ) {
         super(id, createdAt, updatedAt);
         this.talkerId = talkerId;
-        this.roomID = roomID;
+        this.roomId = roomId;
         this.message = message;
     }
 
@@ -32,35 +35,12 @@ public class Message extends Model {
         return talkerId;
     }
 
-    public long getRoomID() {
-        return roomID;
+    public long getRoomId() {
+        return roomId;
     }
 
     public String getMessage() {
         return message;
-    }
-
-    public Talker getTalker() throws SQLException {
-        Connection connection = getConnection();
-        Statement statement = connection.createStatement();
-
-        ResultSet set = statement.executeQuery(
-                "select * from " + Talker.MODEL_NAME + " where " + Talker.ID + " = " + talkerId
-        );
-
-        if (!set.next()) {
-            statement.close();
-            connection.close();
-
-            throw new SQLException();
-        }
-
-        Talker model = Talker.makeInstance(set);
-
-        statement.close();
-        connection.close();
-
-        return model;
     }
 
     /*
@@ -74,24 +54,11 @@ public class Message extends Model {
      * @return Message
      * @throws SQLException SQLエラー
      */
-    public static Message find(long id) throws SQLException {
-        Connection connection = getConnection();
-        Statement statement = connection.createStatement();
-
-        ResultSet set = statement.executeQuery(
-                "select * from " + MODEL_NAME + " where " + ID + " = " + id
-        );
-
-        if (!set.next()) {
-            throw new SQLException();
-        }
-
-        Message model = makeInstance(set);
-
-        statement.close();
-        connection.close();
-
-        return model;
+    public static Message find(long id) throws SQLException, ModelNotFoundException {
+        return (Message)executeFind(statement -> {
+            ResultSet set = select().scopeId(id).get(statement);
+            return makeInstance(set);
+        });
     }
 
     /**
@@ -112,7 +79,42 @@ public class Message extends Model {
         );
     }
 
+    /*
+    Queries
+     */
+
     public static MessageQuery select() {
         return new MessageQuery();
+    }
+
+    public static List<Message> getMessagesByRoomId(long roomId, long limit) throws SQLException {
+        List<Message> messages = new ArrayList<>();
+        executeSQL(statement -> {
+            MessageQuery query = Message.select().scopeRoomId(roomId);
+            ResultSet set;
+            if (limit > 0) {
+                set = query.limit(limit).get(statement);
+            } else {
+                set = query.get(statement);
+            }
+            while (set.next()) {
+                messages.add(
+                        Message.makeInstance(set)
+                );
+            }
+        });
+        return messages;
+    }
+
+    /*
+    Relations
+     */
+
+    public Talker getTalker() throws SQLException, ModelNotFoundException {
+        return Talker.find(talkerId);
+    }
+
+    public Room getRoom() throws SQLException, ModelNotFoundException {
+        return Room.find(roomId);
     }
 }

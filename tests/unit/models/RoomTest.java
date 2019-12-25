@@ -61,7 +61,7 @@ public class RoomTest {
 
     @Test
     public void testIndex() throws SQLException {
-        List<Room> rooms = Room.index();
+        List<Room> rooms = Room.get();
 
         assertTrue(rooms.size() > 0);
     }
