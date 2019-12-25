@@ -12,6 +12,26 @@ import static org.junit.Assert.*;
 
 public class TalkerTest {
     @Test
+    public void testCreate() throws SQLException, SessionIdAlreadyRegisteredException, ModelNotFoundException {
+        String id = String.valueOf(new Random().nextLong());
+        Talker model = Talker.create(id);
+        assertEquals(id, model.getSessionId());
+    }
+
+    @Test
+    public void testCreateExceptFail() {
+        try {
+            Talker.create("test");
+
+            fail();
+        } catch (SQLException | ModelNotFoundException e) {
+            fail();
+        } catch (SessionIdAlreadyRegisteredException e) {
+            assertTrue(true);
+        }
+    }
+
+    @Test
     public void testFind() throws SQLException, ModelNotFoundException {
         Talker model = Talker.find(1);
 
@@ -32,23 +52,10 @@ public class TalkerTest {
     }
 
     @Test
-    public void testCreate() throws SQLException, SessionIdAlreadyRegisteredException {
-        String id = String.valueOf(new Random().nextLong());
-        Talker model = Talker.create(id);
-        assertEquals(id, model.getSessionId());
-    }
+    public void testFindBySessionId() throws SQLException, ModelNotFoundException {
+        Talker talker = Talker.findBySessionId("7EE77DDC9CDE1829065A3813AE06069A");
 
-    @Test
-    public void testCreateExceptFail() {
-        try {
-            Talker.create("test");
-
-            fail();
-        } catch (SQLException e) {
-            fail();
-        } catch (SessionIdAlreadyRegisteredException e) {
-            assertTrue(true);
-        }
+        assertEquals("7EE77DDC9CDE1829065A3813AE06069A", talker.getSessionId());
     }
 
     @Test
@@ -59,22 +66,14 @@ public class TalkerTest {
     @Test
     public void testGetCreatedRooms() throws ModelNotFoundException, SQLException {
         Talker talker = Talker.find(1);
-
-        assertEquals(1, talker.getCreatedRooms(1).get(0).getId());
-        assertTrue(talker.getCreatedRooms(1).size() > 0);
+        assertEquals(1, talker.getCreatedRooms().get(0).getId());
+        assertTrue(talker.getCreatedRooms().size() > 0);
     }
 
     @Test
     public void testGetTalkedRooms() throws ModelNotFoundException, SQLException {
         Talker talker = Talker.find(1);
-        assertEquals(1, talker.getTalkedRooms().get(0).getId(), 1);
+        assertEquals(1, talker.getTalkedRooms().get(0).getId());
         assertTrue(talker.getTalkedRooms().size() > 0);
-    }
-
-    @Test
-    public void testFindBySessionId() throws SQLException {
-        Talker talker = Talker.findBySessionId("7EE77DDC9CDE1829065A3813AE06069A");
-
-        assertEquals("7EE77DDC9CDE1829065A3813AE06069A", talker.getSessionId());
     }
 }

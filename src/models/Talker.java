@@ -29,12 +29,6 @@ public class Talker extends Model {
     }
 
     /*
-    Instance methods
-     */
-
-
-
-    /*
     Static methods
      */
 
@@ -45,7 +39,7 @@ public class Talker extends Model {
      * @return Talkerインスタンス
      * @throws SQLException SQLエラー
      */
-    static Talker makeInstance(ResultSet set) throws SQLException {
+    private static Talker makeInstance(ResultSet set) throws SQLException {
         return new Talker(
                 set.getLong(ID),
                 set.getTimestamp(CREATED_AT),
@@ -75,7 +69,6 @@ public class Talker extends Model {
                     "'" + now() + "', " +
                     "'" + now() + "'" +
                     ")";
-
             if (statement.executeLargeUpdate(sql) != 1) {
                 throw new SQLException();
             }
@@ -98,7 +91,7 @@ public class Talker extends Model {
             ResultSet set = select().scopeId(id).get(statement);
 
             if (!set.next()) {
-                throw new SQLException();
+                throw new ModelNotFoundException(MODEL_NAME, id);
             }
 
             return makeInstance(set);
@@ -117,7 +110,7 @@ public class Talker extends Model {
             ResultSet set = select().scopeSessionId(sessionId).get(statement);
 
             if (!set.next()) {
-                throw new SQLException();
+                throw new ModelNotFoundException(MODEL_NAME, -1);
             }
 
             return makeInstance(set);
