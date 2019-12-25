@@ -54,12 +54,6 @@ public class RoomTest {
     }
 
     @Test
-    public void testGetLimitedMessages() throws ModelNotFoundException, SQLException {
-        Room model = Room.find(1);
-        assertTrue(model.getMessages(10).size() > 0);
-    }
-
-    @Test
     public void testIndex() throws SQLException {
         List<Room> rooms = Room.get();
 

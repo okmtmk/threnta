@@ -3,7 +3,9 @@ package models;
 import builder.models.MessageQuery;
 import exceptions.ModelNotFoundException;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +49,33 @@ public class Message extends Model {
     Static methods
      */
 
+    public static Message create(long talkerId, long roomId, String message) throws ModelNotFoundException, SQLException {
+        return (Message) executeFind(statement -> {
+            //language=sql
+            String sql = "insert into " + MODEL_NAME +
+                    "(" +
+                    TALKER_ID + ", " +
+                    ROOM_ID + ", " +
+                    MESSAGE + ", " +
+                    CREATED_AT + ", " +
+                    UPDATED_AT + ")" +
+                    " values (" +
+                    talkerId + ", " +
+                    roomId + ", " +
+                    "'" + message + "', " +
+                    "'" + now() + "', " +
+                    "'" + now() + "')";
+            System.out.println(sql);
+
+            if (statement.executeLargeUpdate(sql) != 1) {
+                throw new SQLException();
+            }
+
+            long id = getLastInsertedId(MODEL_NAME, statement);
+            return find(id);
+        });
+    }
+
     /**
      * 取得
      *
@@ -55,8 +84,11 @@ public class Message extends Model {
      * @throws SQLException SQLエラー
      */
     public static Message find(long id) throws SQLException, ModelNotFoundException {
-        return (Message)executeFind(statement -> {
+        return (Message) executeFind(statement -> {
             ResultSet set = select().scopeId(id).get(statement);
+            if (!set.next()) {
+                throw new ModelNotFoundException(MODEL_NAME, id);
+            }
             return makeInstance(set);
         });
     }
@@ -87,16 +119,12 @@ public class Message extends Model {
         return new MessageQuery();
     }
 
-    public static List<Message> getMessagesByRoomId(long roomId, long limit) throws SQLException {
+    public static List<Message> getMessagesByRoomId(long roomId) throws SQLException {
         List<Message> messages = new ArrayList<>();
         executeSQL(statement -> {
             MessageQuery query = Message.select().scopeRoomId(roomId);
             ResultSet set;
-            if (limit > 0) {
-                set = query.limit(limit).get(statement);
-            } else {
-                set = query.get(statement);
-            }
+            set = query.get(statement);
             while (set.next()) {
                 messages.add(
                         Message.makeInstance(set)

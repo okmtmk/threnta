@@ -191,24 +191,13 @@ public class Room extends Model {
      */
 
     /**
-     * 関連するメッセージを全件取得
+     * 関連するメッセージを指定件数取得
      *
      * @return メッセージ
      * @throws SQLException SQLエラー
      */
     public List<Message> getMessages() throws SQLException {
-        return getMessages(-1);
-    }
-
-    /**
-     * 関連するメッセージを指定件数取得
-     *
-     * @param limit 取得する数
-     * @return メッセージ
-     * @throws SQLException SQLエラー
-     */
-    public List<Message> getMessages(int limit) throws SQLException {
-        return Message.getMessagesByRoomId(id, limit);
+        return Message.getMessagesByRoomId(id);
     }
 
     /**
