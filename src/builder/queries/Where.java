@@ -8,7 +8,7 @@ public class Where {
     }
 
     public Where(String column, String operator, String value) {
-        command = column + " " + operator + " " + value;
+        command = column + " " + operator + " '" + value + "'";
     }
 
     public String getCommand() {

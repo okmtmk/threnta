@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Tue Dec 24 13:13:35 JST 2019:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-016f-361c-3109-00000d8c1750 
+Wed Dec 25 23:14:36 JST 2019:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-016f-3d68-ce6a-00000da08dc8 
 on database directory /Users/okamoto/Repositories/threnta/database/threnta with class loader sun.misc.Launcher$AppClassLoader@18b4aac2 
 Loaded from file:/Users/okamoto/Repositories/threnta/lib/derby-10.14.1.0.jar
 java.vendor=Oracle Corporation

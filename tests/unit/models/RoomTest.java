@@ -31,7 +31,7 @@ public class RoomTest {
     }
 
     @Test
-    public void testCreate() throws SQLException {
+    public void testCreate() throws SQLException, ModelNotFoundException {
         Room model = Room.create(1, "test", "");
         assertEquals("test", model.getName());
     }

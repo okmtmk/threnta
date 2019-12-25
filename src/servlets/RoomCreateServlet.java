@@ -1,5 +1,6 @@
 package servlets;
 
+import exceptions.ModelNotFoundException;
 import models.Room;
 import models.Talker;
 import utils.StringEscapeUtility;
@@ -40,13 +41,13 @@ public class RoomCreateServlet extends HttpServlet {
         Talker talker;
         try {
             talker = Talker.findBySessionId(request.getSession(false).getId());
-        } catch (SQLException e) {
+        } catch (SQLException | ModelNotFoundException e) {
             throw new ServletException("ユーザ情報の取得に失敗しました。" + request.getSession(false).getId());
         }
 
         try {
             Room.create(talker.getId(), name, description);
-        } catch (SQLException e) {
+        } catch (SQLException | ModelNotFoundException e) {
             throw new ServletException("スレッドの作成に失敗しました。");
         }
 

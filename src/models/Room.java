@@ -174,7 +174,11 @@ public class Room extends Model {
     public static List<Room> getRoomsByTalkedTalkerId(long talkerId) throws SQLException {
         List<Room> rooms = new ArrayList<>();
         executeSQL(statement -> {
-            ResultSet set = select().scopeTalkedTalkerId(talkerId).get(statement);
+            ResultSet set = statement.executeQuery(
+                    "select * from ROOMS where " + ID + " = " +
+                            "(select " + Message.ROOM_ID + " from " + Message.MODEL_NAME +
+                            " where " + Message.TALKER_ID + " = " + talkerId + ")"
+            );
             while (set.next()) {
                 rooms.add(makeInstance(set));
             }
