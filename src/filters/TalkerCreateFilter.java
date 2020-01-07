@@ -1,5 +1,7 @@
 package filters;
 
+import exceptions.ModelNotFoundException;
+import exceptions.SessionIdAlreadyRegisteredException;
 import models.Talker;
 
 import javax.servlet.*;
@@ -7,6 +9,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebFilter(filterName = "TalkerCreateFilter")
 public class TalkerCreateFilter implements Filter {
@@ -20,12 +23,11 @@ public class TalkerCreateFilter implements Filter {
             HttpSession session = httpReq.getSession(true);
 
             try {
-                Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
                 if (!Talker.isSessionIdRegistered(session.getId())) {
                     Talker.create(session.getId());
                 }
-            } catch (Exception e) {
-                throw new ServletException("ユーザ登録に失敗しました。" + e.getLocalizedMessage());
+            } catch (SQLException | ModelNotFoundException | SessionIdAlreadyRegisteredException e) {
+                throw new ServletException("ユーザ登録に失敗しました。" + e.getMessage());
             }
         }
 
