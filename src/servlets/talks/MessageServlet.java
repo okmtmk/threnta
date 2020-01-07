@@ -21,8 +21,6 @@ public class MessageServlet extends HttpServlet {
         String message = request.getParameter("message");
         long threadId = Long.parseLong(request.getParameter("thread"));
 
-        // todo Viewへエラー表示
-
         // エスケープ処理
         if (message != null) {
             message = StringEscapeUtility.escape(message);

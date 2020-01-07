@@ -6,6 +6,10 @@
     <listener>
         <listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
     </listener>
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/error.jsp</location>
+    </error-page>
     <servlet>
         <description>JAX-WS endpoint</description>
         <display-name>WSServlet</display-name>
