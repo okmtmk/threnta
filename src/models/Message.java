@@ -1,6 +1,7 @@
 package models;
 
 import builder.models.MessageQuery;
+import builder.queries.Query;
 import exceptions.ModelNotFoundException;
 
 import java.sql.ResultSet;
@@ -122,7 +123,7 @@ public class Message extends Model {
     public static List<Message> getMessagesByRoomId(long roomId) throws SQLException {
         List<Message> messages = new ArrayList<>();
         executeSQL(statement -> {
-            MessageQuery query = Message.select().scopeRoomId(roomId);
+            Query query = Message.select().scopeRoomId(roomId).desc(Model.UPDATED_AT);
             ResultSet set;
             set = query.get(statement);
             while (set.next()) {

@@ -25,20 +25,12 @@ public class RoomServlet extends HttpServlet {
         // 特殊文字のエスケープ
         if (name != null) {
             name = StringEscapeUtility.escape(name);
+        } else {
+            throw new IOException("nameは必ず必要です。");
         }
 
         if (description != null) {
             description = StringEscapeUtility.escape(description);
-        }
-
-        if (name == null) {
-            throw new IOException("nameは必ず必要です。");
-        }
-
-        try {
-            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-        } catch (ClassNotFoundException e) {
-            throw new ServletException("JDBCドライバの読込に失敗しました。");
         }
 
         Talker talker;
@@ -61,13 +53,13 @@ public class RoomServlet extends HttpServlet {
         String threadId = request.getParameter("thread");
 
         if (threadId != null) {
-            // スレッド表示
-
             try {
                 long roomId = Long.parseLong(threadId);
                 Room room = Room.find(roomId);
 
-                // todo トーク画面へ遷移
+                request.setAttribute("room", room);
+                request.setAttribute("messages", room.getMessages());
+                request.getRequestDispatcher("/WEB-INF/jsp/views/messages/message.jsp").forward(request, response);
             } catch (SQLException e) {
                 request.setAttribute("error", e);
             } catch (ModelNotFoundException | NumberFormatException e) {

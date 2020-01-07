@@ -20,5 +20,8 @@
         <p class="text-muted text-right">
             作成日 : <%= room.getCreatedAt() %>
         </p>
+        <a class="btn btn-primary" href="/threnta?thread=<%=room.getId()%>">
+            開く
+        </a>
     </div>
 </div>

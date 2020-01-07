@@ -33,7 +33,6 @@
                 request.setAttribute("room", it);
         %>
         <div class="col-12 mb-3">
-
             <jsp:include page="/WEB-INF/jsp/components/room-card.jsp"/>
         </div>
         <% } %>
