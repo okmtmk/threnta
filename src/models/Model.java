@@ -1,6 +1,5 @@
 package models;
 
-import builder.queries.Query;
 import exceptions.ModelNotFoundException;
 import interfaces.FindStatementHandler;
 import interfaces.StatementHandler;
@@ -50,6 +49,12 @@ abstract public class Model {
      * @throws SQLException SQLエラー
      */
     protected static Connection getConnection() throws SQLException {
+        try {
+            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+        } catch (ClassNotFoundException e) {
+            throw new SQLException(e.getLocalizedMessage());
+        }
+
         String driver = "jdbc:derby:/Users/okamoto/Repositories/threnta/database/threnta;";
         return DriverManager.getConnection(driver, "okmt", "threnta");
     }

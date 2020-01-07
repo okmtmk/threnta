@@ -63,7 +63,7 @@ public abstract class Query {
             sql.append(orderBy.getCommand());
         }
 
-        System.out.println(sql);
+//        System.out.println(sql);
         return statement.executeQuery(sql.toString());
     }
 

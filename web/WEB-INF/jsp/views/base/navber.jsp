@@ -19,7 +19,7 @@
                 <a class="nav-link" href="/threnta">スレッド一覧</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/threnta/rooms/create">スレッド作成</a>
+                <a class="nav-link" href="/threnta/rooms/create.jsp">スレッド作成</a>
             </li>
         </ul>
     </div>
