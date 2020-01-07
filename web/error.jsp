@@ -19,12 +19,10 @@
                 <h6 class="card-title font-weight-bold">
                     エラーが発生しました
                 </h6>
-                <p>
+                <p class="card-text">
                     <%=exception.getLocalizedMessage()%>
                 </p>
-                <p>
-                    <a href="/threnta" class="btn btn-outline-light">戻る</a>
-                </p>
+                <a href="/threnta" class="btn btn-outline-light">戻る</a>
             </div>
         </div>
     </div>
