@@ -21,6 +21,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/threnta/rooms/create.jsp">スレッド作成</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/threnta/about.jsp">About</a>
+            </li>
         </ul>
     </div>
 </nav>
