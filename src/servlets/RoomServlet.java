@@ -51,6 +51,7 @@ public class RoomServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String threadId = request.getParameter("thread");
+        String search = request.getParameter("search");
 
         if (threadId != null) {
             try {
@@ -64,6 +65,23 @@ public class RoomServlet extends HttpServlet {
                 request.setAttribute("error", e);
             } catch (ModelNotFoundException | NumberFormatException e) {
                 responseRoomList(request, response);
+            }
+        } else if (search != null) {
+            List<Room> rooms;
+            try {
+                rooms = Room.getRoomsByName(search);
+
+                if (rooms.size() <= 0) {
+                    request.setAttribute("error", new Exception("スレッドが見つかりませんでした。"));
+                    request.getRequestDispatcher("/WEB-INF/jsp/views/rooms/room-list.jsp").forward(request, response);
+                    return;
+                }
+
+                request.setAttribute("rooms", rooms);
+                request.getRequestDispatcher("/WEB-INF/jsp/views/rooms/room-list.jsp").forward(request, response);
+            } catch (SQLException e) {
+                request.setAttribute("error", e);
+                request.getRequestDispatcher("/WEB-INF/jsp/views/rooms/room-list.jsp").forward(request, response);
             }
         } else {
             responseRoomList(request, response);

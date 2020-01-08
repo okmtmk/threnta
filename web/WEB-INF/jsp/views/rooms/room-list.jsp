@@ -15,7 +15,7 @@
 <body class="bg-light">
 <jsp:include page="/WEB-INF/jsp/views/base/navber.jsp"/>
 <div class="container">
-    <h1 class="font-weight-bold">スレッド一覧</h1>
+    <h2 class="font-weight-bold">スレッド一覧</h2>
 
     <% if (request.getAttribute("error") != null) {
         Exception e = (Exception) request.getAttribute("error");

@@ -25,5 +25,14 @@
                 <a class="nav-link" href="/threnta/about.jsp">About</a>
             </li>
         </ul>
+        <form class="form-inline my-2 my-lg-0" action="/threnta" method="get">
+            <input class="form-control mr-sm-2" type="search"
+                   placeholder="スレッド名検索" aria-label="スレッド名検索"
+                   name="search"
+            >
+            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
     </div>
 </nav>
