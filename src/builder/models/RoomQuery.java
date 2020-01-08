@@ -13,4 +13,9 @@ public class RoomQuery extends Query {
         addWhere(new Where(Room.CREATE_TALKER_ID, "=", talkerId));
         return this;
     }
+
+    public RoomQuery scopeRoomName(String name) {
+        addWhere(new Where(Room.NAME, "like", "%" + name + "%"));
+        return this;
+    }
 }

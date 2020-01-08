@@ -69,7 +69,6 @@ public abstract class Query {
 
     public Query scopeId(long id) {
         addWhere(new Where("id", "=", id));
-
         return this;
     }
 

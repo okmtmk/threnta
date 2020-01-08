@@ -65,6 +65,12 @@ public class RoomTest {
     }
 
     @Test
+    public void testGetRoomsByName() throws SQLException {
+        List<Room> rooms = Room.getRoomsByName("test");
+        assertTrue(rooms.size() > 0);
+    }
+
+    @Test
     public void testGetMessages() throws ModelNotFoundException, SQLException {
         Room model = Room.find(1);
 

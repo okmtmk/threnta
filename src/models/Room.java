@@ -171,6 +171,12 @@ public class Room extends Model {
         return rooms;
     }
 
+    /**
+     * 指定したTalker IDが発言したスレッドを取得
+     * @param talkerId 検索するTalker ID
+     * @return スレッド
+     * @throws SQLException SQLエラー
+     */
     public static List<Room> getRoomsByTalkedTalkerId(long talkerId) throws SQLException {
         List<Room> rooms = new ArrayList<>();
         executeSQL(statement -> {
@@ -184,6 +190,25 @@ public class Room extends Model {
                 rooms.add(makeInstance(set));
             }
         });
+        return rooms;
+    }
+
+    /**
+     * スレッド名の部分一致で検索して取得
+     *
+     * @param name 検索するスレッド名
+     * @return スレッド
+     * @throws SQLException SQLエラー
+     */
+    public static List<Room> getRoomsByName(String name) throws SQLException {
+        List<Room> rooms = new ArrayList<>();
+        executeSQL(statement -> {
+            ResultSet set = select().scopeRoomName(name).desc(Model.UPDATED_AT).get(statement);
+            while (set.next()) {
+                rooms.add(makeInstance(set));
+            }
+        });
+
         return rooms;
     }
 
