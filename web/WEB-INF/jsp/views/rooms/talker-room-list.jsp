@@ -42,7 +42,9 @@
                 for (Room it : createdRooms) {
                     request.setAttribute("room", it);
             %>
-            <jsp:include page="/WEB-INF/jsp/components/updatable-room-card.jsp"/>
+            <div class="col-12 mb-3">
+                <jsp:include page="/WEB-INF/jsp/components/updatable-room-card.jsp"/>
+            </div>
             <%
                     }
                 }
@@ -63,7 +65,9 @@
                 for (Room it : talkedRooms) {
                     request.setAttribute("room", it);
             %>
-            <jsp:include page="/WEB-INF/jsp/components/room-card.jsp"/>
+            <div class="col-12 mb-3">
+                <jsp:include page="/WEB-INF/jsp/components/room-card.jsp"/>
+            </div>
             <%
                     }
                 }

@@ -151,6 +151,10 @@ public class Room extends Model {
         return this;
     }
 
+    public void delete() throws SQLException {
+        executeSQL(statement -> statement.executeUpdate("delete from ROOMS where " + Model.ID + " = " + id));
+    }
+
     /*
     Queries
      */
@@ -173,6 +177,7 @@ public class Room extends Model {
 
     /**
      * 指定したTalker IDが発言したスレッドを取得
+     *
      * @param talkerId 検索するTalker ID
      * @return スレッド
      * @throws SQLException SQLエラー

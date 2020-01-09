@@ -26,5 +26,8 @@
         <a class="btn btn-secondary" href="/threnta/threads/update?thread=<%=room.getId()%>">
             編集
         </a>
+        <a class="btn btn-danger" href="/threnta/threads/delete?thread=<%=room.getId()%>">
+            削除
+        </a>
     </div>
 </div>
