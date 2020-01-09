@@ -11,7 +11,7 @@
 <jsp:include page="/WEB-INF/jsp/views/base/head.jsp">
     <jsp:param name="title" value="参加したルーム一覧"/>
 </jsp:include>
-<body>
+<body class="bg-light">
 <jsp:include page="/WEB-INF/jsp/views/base/navber.jsp"/>
 <div class="container">
     <div class="row">
@@ -32,11 +32,19 @@
         <div class="col-12 col-md-6">
             <h3 class="font-weight-bold">作成したスレッド</h3>
             <%
+                if (createdRooms.size() <= 0) {
+            %>
+            <div class="text-center">
+                <small class="text-muted">作成したスレッドはありません。</small>
+            </div>
+            <%
+            } else {
                 for (Room it : createdRooms) {
                     request.setAttribute("room", it);
             %>
             <jsp:include page="/WEB-INF/jsp/components/room-card.jsp"/>
             <%
+                    }
                 }
             %>
         </div>
@@ -44,11 +52,20 @@
         <div class="col-12 col-md-6">
             <h3 class="font-weight-bold">会話したスレッド</h3>
             <%
+                if (talkedRooms.size() <= 0) {
+
+            %>
+            <div class="text-center">
+                <small class="text-muted">会話したスレッドはありません。</small>
+            </div>
+            <%
+            } else {
                 for (Room it : talkedRooms) {
                     request.setAttribute("room", it);
             %>
             <jsp:include page="/WEB-INF/jsp/components/room-card.jsp"/>
             <%
+                    }
                 }
             %>
         </div>
