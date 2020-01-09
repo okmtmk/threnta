@@ -26,5 +26,8 @@
     <!-- Font Awesome dependencies -->
     <script src="https://kit.fontawesome.com/b48b4df648.js" crossorigin="anonymous"></script>
 
+    <!-- Favicon -->
+    <link rel="icon" href="/threnta/favicon.ico" />
+
     <title><%=request.getParameter("title")%> | スレンタ - Thread Talking App</title>
 </head>
