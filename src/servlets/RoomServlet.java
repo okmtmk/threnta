@@ -20,8 +20,6 @@ public class RoomServlet extends HttpServlet {
         String name = request.getParameter("name");
         String description = request.getParameter("description");
 
-        // todo エラー表示
-
         // 特殊文字のエスケープ
         if (name != null) {
             name = StringEscapeUtility.escape(name);

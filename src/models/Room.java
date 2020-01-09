@@ -99,7 +99,7 @@ public class Room extends Model {
         List<Room> rooms = new ArrayList<>();
 
         executeSQL(statement -> {
-            ResultSet set = select().desc(Room.CREATED_AT).get(statement);
+            ResultSet set = select().desc(Room.UPDATED_AT).get(statement);
             while (set.next()) {
                 rooms.add(Room.makeInstance(set));
             }
