@@ -14,7 +14,7 @@
 <jsp:include page="/WEB-INF/jsp/views/base/head.jsp">
     <jsp:param name="title" value="スレッドの検索"/>
 </jsp:include>
-<body>
+<body class="bg-light">
 <jsp:include page="/WEB-INF/jsp/views/base/navber.jsp"/>
 <div class="container">
     <h2 class="font-weight-bold">「<%=search%>」の検索結果</h2>
