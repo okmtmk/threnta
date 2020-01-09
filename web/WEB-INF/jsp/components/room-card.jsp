@@ -18,7 +18,7 @@
             <%= room.getDescription() %>
         </p>
         <p class="text-muted text-right">
-            作成日 : <%= room.getUpdatedAt() %>
+            更新日 : <%= room.getUpdatedAt() %>
         </p>
         <a class="btn btn-primary" href="/threnta?thread=<%=room.getId()%>">
             開く
