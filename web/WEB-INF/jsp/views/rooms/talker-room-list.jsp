@@ -42,7 +42,7 @@
                 for (Room it : createdRooms) {
                     request.setAttribute("room", it);
             %>
-            <jsp:include page="/WEB-INF/jsp/components/room-card.jsp"/>
+            <jsp:include page="/WEB-INF/jsp/components/updatable-room-card.jsp"/>
             <%
                     }
                 }

@@ -62,6 +62,7 @@ public class RoomServlet extends HttpServlet {
             } catch (SQLException e) {
                 throw new ServletException(e);
             } catch (ModelNotFoundException | NumberFormatException e) {
+                request.setAttribute("error", e);
                 responseRoomList(request, response);
             }
         } else if (search != null) {
@@ -96,8 +97,7 @@ public class RoomServlet extends HttpServlet {
             request.setAttribute("rooms", rooms);
             request.getRequestDispatcher("/WEB-INF/jsp/views/rooms/room-list.jsp").forward(request, response);
         } catch (SQLException e) {
-            request.setAttribute("error", e);
-            request.getRequestDispatcher("/WEB-INF/jsp/views/rooms/room-list.jsp").forward(request, response);
+            throw new ServletException(e);
         }
     }
 }
