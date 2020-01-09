@@ -16,6 +16,12 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
+                <a class="nav-link" href="/threnta/about.jsp">TOP</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/threnta/threads/pk-search.jsp">PK検索</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="/threnta">スレッド一覧</a>
             </li>
             <li class="nav-item">
@@ -23,12 +29,6 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/threnta/threads/user">参加したスレッド一覧</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/threnta/about.jsp">About</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/threnta/threads/pk-search.jsp">PK検索</a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" action="/threnta" method="get">

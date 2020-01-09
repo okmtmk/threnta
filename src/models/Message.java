@@ -66,7 +66,6 @@ public class Message extends Model {
                     "'" + message + "', " +
                     "'" + now() + "', " +
                     "'" + now() + "')";
-            System.out.println(sql);
 
             if (statement.executeLargeUpdate(sql) != 1) {
                 throw new SQLException();
