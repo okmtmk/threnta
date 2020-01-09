@@ -73,7 +73,11 @@ public class Message extends Model {
             }
 
             long id = getLastInsertedId(MODEL_NAME, statement);
-            return find(id);
+
+            Message model = find(id);
+            model.getRoom().update(); // ルームの更新日時を更新
+
+            return model;
         });
     }
 
