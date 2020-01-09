@@ -1,4 +1,4 @@
-package servlets;
+package servlets.rooms;
 
 import exceptions.ModelNotFoundException;
 import models.Room;
