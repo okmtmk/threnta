@@ -18,7 +18,7 @@
         「Threnta」はシンプルなチャットアプリです。
     </div>
     <h2>スレッドを立てて会話しよう</h2>
-    <div class="lead text-muted">
+    <div class="lead text-muted mb-3">
         スレッドごとに話題は分かれています。話したい話題のスレッドがない場合は新しく作って、会話を初めてみましょう。
     </div>
 </div>
