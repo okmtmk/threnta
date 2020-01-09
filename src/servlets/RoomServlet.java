@@ -62,26 +62,28 @@ public class RoomServlet extends HttpServlet {
                 request.setAttribute("messages", room.getMessages());
                 request.getRequestDispatcher("/WEB-INF/jsp/views/messages/message.jsp").forward(request, response);
             } catch (SQLException e) {
-                request.setAttribute("error", e);
+                throw new ServletException(e);
             } catch (ModelNotFoundException | NumberFormatException e) {
                 responseRoomList(request, response);
             }
         } else if (search != null) {
+            search = StringEscapeUtility.escape(search);
+
             List<Room> rooms;
             try {
                 rooms = Room.getRoomsByName(search);
+                request.setAttribute("search", search);
 
                 if (rooms.size() <= 0) {
                     request.setAttribute("error", new Exception("スレッドが見つかりませんでした。"));
-                    request.getRequestDispatcher("/WEB-INF/jsp/views/rooms/room-list.jsp").forward(request, response);
+                    request.getRequestDispatcher("/WEB-INF/jsp/views/rooms/search-room-list.jsp").forward(request, response);
                     return;
                 }
 
                 request.setAttribute("rooms", rooms);
-                request.getRequestDispatcher("/WEB-INF/jsp/views/rooms/room-list.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/jsp/views/rooms/search-room-list.jsp").forward(request, response);
             } catch (SQLException e) {
-                request.setAttribute("error", e);
-                request.getRequestDispatcher("/WEB-INF/jsp/views/rooms/room-list.jsp").forward(request, response);
+                throw new ServletException(e);
             }
         } else {
             responseRoomList(request, response);
