@@ -152,7 +152,8 @@ public class Room extends Model {
     }
 
     public void delete() throws SQLException {
-        executeSQL(statement -> statement.executeUpdate("delete from ROOMS where " + Model.ID + " = " + id));
+        Message.deleteByRoomId(id);
+        executeSQL(statement -> statement.executeUpdate("delete from " + MODEL_NAME + " where " + Model.ID + " = " + id));
     }
 
     /*
@@ -186,7 +187,7 @@ public class Room extends Model {
         List<Room> rooms = new ArrayList<>();
         executeSQL(statement -> {
             ResultSet set = statement.executeQuery(
-                    "select distinct "+ MODEL_NAME+".*  from " + MODEL_NAME +
+                    "select distinct " + MODEL_NAME + ".*  from " + MODEL_NAME +
                             " inner join " + Message.MODEL_NAME +
                             " on(" + MODEL_NAME + "." + ID + " = " + Message.MODEL_NAME + "." + Message.ROOM_ID + ") " +
                             "where " + Message.MODEL_NAME + "." + Message.TALKER_ID + " = " + talkerId

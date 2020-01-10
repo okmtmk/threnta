@@ -138,6 +138,19 @@ public class Message extends Model {
         return messages;
     }
 
+    /**
+     * 指定ルームIDのレコードをすべて削除する
+     * @param roomId ルームID
+     * @throws SQLException SQLエラー
+     */
+    public static void deleteByRoomId(long roomId) throws SQLException {
+        executeSQL(statement ->{
+            // language=sql
+            String sql = "delete from " + MODEL_NAME + " where " + ROOM_ID + "=" + roomId;
+            statement.executeUpdate(sql);
+        });
+    }
+
     /*
     Relations
      */
